@@ -9,3 +9,11 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+EXPOSE 9200
+VOLUME /var/lib/elasticsearch
+VOLUME /var/log/elasticsearch
+
+COPY elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
+USER elasticsearch
+
+CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
