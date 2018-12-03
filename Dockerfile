@@ -10,10 +10,12 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 9200
+EXPOSE 9300
 VOLUME /var/lib/elasticsearch
 VOLUME /var/log/elasticsearch
 
 COPY elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 USER elasticsearch
+ENV CLUSTER_NAME=docker
 
 CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
