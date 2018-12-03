@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  elasticsearch:
+    image: bearstech/elasticsearch:latest
+    volumes:
+      - ./data/elasticsearch/lib:/var/lib/elasticsearch
+      - ./data/elasticsearch/log:/var/log/elasticsearch
+    #user: ${UID}
+    ports:
+      - 9200
+    hostname: elastic
+
+  cerebro:
+    image: bearstech/cerebro:latest
+    links:
+      - elasticsearch
+    ports:
+      - 9000
+    user: ${UID}
+    volumes:
+      - ./data/cerebro:/var/lib/cerebro
