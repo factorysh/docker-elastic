@@ -1,0 +1,8 @@
+Docker Elastic
+==============
+
+Elasticsearch
+-------------
+
+Cerebro
+-------
