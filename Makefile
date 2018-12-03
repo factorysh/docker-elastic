@@ -22,3 +22,11 @@ push:
 	docker push bearstech/elasticsearch:latest
 	docker push bearstech/cerebro
 
+up: .env
+	docker-compose up
+
+.env:
+	echo "UID=`id -u`\n" > .env
+
+clean:
+	rm -rf data
