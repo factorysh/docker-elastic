@@ -1,0 +1,11 @@
+FROM bearstech/java:latest
+
+ENV CEREBRO_VERSION=0.8.1
+
+RUN cd /opt \
+        && wget -O- https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VERSION}/cerebro-${CEREBRO_VERSION}.tgz | tar -xvz \
+        && ln -s /opt/cerebro-${CEREBRO_VERSION} /opt/cerebro
+
+EXPOSE 9000
+
+CMD ["/opt/cerebro/bin/cerebro", "-Dhttp.port=9000", "-Dhttp.address=0.0.0.0"]
