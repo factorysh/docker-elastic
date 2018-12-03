@@ -8,4 +8,9 @@ RUN cd /opt \
 
 EXPOSE 9000
 
-CMD ["/opt/cerebro/bin/cerebro", "-Dhttp.port=9000", "-Dhttp.address=0.0.0.0"]
+VOLUME /var/lib/cerebro
+COPY cerebro.conf /etc/cerebro.conf
+USER cerebro
+
+CMD ["/opt/cerebro/bin/cerebro", "-Dhttp.port=9000", "-Dhttp.address=0.0.0.0",\
+    "-Dconfig.file=/etc/cerebro.conf" ]
