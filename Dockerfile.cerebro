@@ -1,9 +1,10 @@
-FROM bearstech/java:latest
+FROM bearstech/java:1.8
 
 ENV CEREBRO_VERSION=0.8.1
 
-RUN cd /opt \
-        && wget -O- https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VERSION}/cerebro-${CEREBRO_VERSION}.tgz | tar -xvz \
+WORKDIR /opt
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN wget -O- https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VERSION}/cerebro-${CEREBRO_VERSION}.tgz | tar -xvz \
         && ln -s /opt/cerebro-${CEREBRO_VERSION} /opt/cerebro
 
 EXPOSE 9000
