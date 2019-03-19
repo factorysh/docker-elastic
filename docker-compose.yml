@@ -1,3 +1,5 @@
+---
+
 version: "3"
 
 services:
@@ -6,7 +8,7 @@ services:
     volumes:
       - ./data/elasticsearch/lib:/var/lib/elasticsearch
       - ./data/elasticsearch/log:/var/log/elasticsearch
-    #user: ${UID}
+    # user: ${UID}
     ports:
       - 9200
     hostname: elastic
