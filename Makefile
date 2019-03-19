@@ -28,5 +28,8 @@ up: .env
 .env:
 	echo "UID=`id -u`\n" > .env
 
+tests:
+	@echo "ok"
+
 clean:
 	rm -rf data
