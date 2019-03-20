@@ -31,5 +31,8 @@ up: .env
 tests:
 	@echo "ok"
 
+down:
+	@echo "ok"
+
 clean:
 	rm -rf data
