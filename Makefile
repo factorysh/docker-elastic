@@ -1,13 +1,21 @@
 GOSS_VERSION := 0.3.6
+GIT_VERSION := $(shell git rev-parse HEAD)
 
 build: build-es build-cerebro
 
 build-es:
-	docker build -t bearstech/elasticsearch:6 .
+	docker build \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		-t bearstech/elasticsearch:6 \
+		.
 	docker tag bearstech/elasticsearch:6 bearstech/elasticsearch:latest
 
 build-cerebro:
-	docker build -t bearstech/cerebro -f Dockerfile.cerebro .
+	docker build \
+		-t bearstech/cerebro \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		-f Dockerfile.cerebro \
+		.
 
 pull:
 	docker pull bearstech/java:latest
