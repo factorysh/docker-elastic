@@ -13,5 +13,8 @@ VOLUME /var/lib/cerebro
 COPY cerebro.conf /etc/cerebro.conf
 USER cerebro
 
+ARG GIT_VERSION
+LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
+
 CMD ["/opt/cerebro/bin/cerebro", "-Dhttp.port=9000", "-Dhttp.address=0.0.0.0",\
     "-Dconfig.file=/etc/cerebro.conf" ]

@@ -21,5 +21,7 @@ VOLUME /var/log/elasticsearch
 COPY elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 USER elasticsearch
 ENV CLUSTER_NAME=docker
+ARG GIT_VERSION
+LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
 
 CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
