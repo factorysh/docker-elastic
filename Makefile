@@ -46,8 +46,9 @@ test-cli: bin/goss
 		goss --vars=vars.yml validate
 
 test-cerebro:
+	docker-compose down
 	docker-compose up -d cerebro
-	sleep 3
+	sleep 15
 	docker-compose up --exit-code-from client
 	docker-compose down
 
