@@ -13,6 +13,7 @@ EXPOSE 9000
 
 VOLUME /var/lib/cerebro
 COPY cerebro.conf /etc/cerebro.conf
+COPY logback.xml /opt/cerebro-${CEREBRO_VERSION}/conf/logback.xml
 USER cerebro
 
 ARG GIT_VERSION
