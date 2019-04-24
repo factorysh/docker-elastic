@@ -36,8 +36,16 @@ up: .env
 .env:
 	echo "UID=`id -u`\n" > .env
 
-tests:
-	@echo "ok"
+test-cli: bin/goss
+	docker run \
+		--rm \
+		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
+		-v `pwd`/tests:/tests:ro \
+		-w /tests \
+		bearstech/elasticsearch:latest \
+		goss --vars=vars.yml validate
+
+tests: test-cli
 
 down:
 	@echo "ok"

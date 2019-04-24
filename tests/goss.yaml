@@ -1,0 +1,6 @@
+---
+command:
+  "/usr/share/elasticsearch/bin/elasticsearch --version":
+    exit-status: 0
+    stdout:
+      - "/Version: {{ .Vars.elasticsearch }}/"
