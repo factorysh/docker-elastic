@@ -8,7 +8,6 @@ services:
     volumes:
       - ./data/elasticsearch/lib:/var/lib/elasticsearch
       - ./data/elasticsearch/log:/var/log/elasticsearch
-    # user: ${UID}
     ports:
       - 9200
     hostname: elastic
@@ -19,7 +18,6 @@ services:
       - elasticsearch
     ports:
       - 9000
-    user: ${UID}
     volumes:
       - ./data/cerebro:/var/lib/cerebro
 
