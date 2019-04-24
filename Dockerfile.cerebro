@@ -4,6 +4,8 @@ ENV CEREBRO_VERSION=0.8.1
 
 WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN adduser --system --uid 1001 cerebro
 RUN wget -O- https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VERSION}/cerebro-${CEREBRO_VERSION}.tgz | tar -xvz \
         && ln -s /opt/cerebro-${CEREBRO_VERSION} /opt/cerebro
 
