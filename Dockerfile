@@ -9,7 +9,7 @@ RUN apt-get update \
 
 RUN adduser --uid 1001 --system elasticsearch
 
-ENV ELASTICSEARCH_VERSION=6.6.1
+ENV ELASTICSEARCH_VERSION=6.7.1
 RUN apt-get update \
     && apt-get install -y --no-install-recommends elasticsearch=${ELASTICSEARCH_VERSION} \
     && apt-get clean \
