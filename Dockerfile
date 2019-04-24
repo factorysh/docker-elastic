@@ -15,8 +15,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-
 EXPOSE 9200
+LABEL traefik.port=9200
 EXPOSE 9300
 VOLUME /var/lib/elasticsearch
 VOLUME /var/log/elasticsearch
