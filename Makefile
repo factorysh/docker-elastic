@@ -20,10 +20,16 @@ build-cerebro:
 pull:
 	docker pull bearstech/java:latest
 
-bin/goss:
+bin:
 	mkdir -p bin
+
+bin/goss: bin
 	curl -o bin/goss -L https://github.com/aelsabbahy/goss/releases/download/v${GOSS_VERSION}/goss-linux-amd64
 	chmod +x bin/goss
+
+bin/wait-for: bin
+	curl -o bin/wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for
+	chmod +x bin/wait-for
 
 push:
 	docker push bearstech/elasticsearch:6
@@ -45,10 +51,9 @@ test-cli: bin/goss
 		bearstech/elasticsearch:latest \
 		goss --vars=vars.yml validate
 
-test-cerebro:
+test-cerebro: bin/wait-for
 	docker-compose down
 	docker-compose up -d cerebro
-	sleep 15
 	docker-compose up --exit-code-from client
 	docker-compose down
 

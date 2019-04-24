@@ -27,9 +27,18 @@ services:
     image: byrnedo/alpine-curl
     links:
       - cerebro
+    entrypoint: ""
+    volumes:
+      - ./bin/wait-for:/usr/local/bin/wait-for
     command: >
-      -H 'Content-type: application/json'
+      wait-for elasticsearch:9200 --timeout=30 --
+      wait-for cerebro:9000 --timeout=30 --
+      curl
+      -H "Content-type: application/json"
       --silent
       -XPOST
+      -v
+      --connect-timeout 5
+      --retry-max-time 90
       --data '{"host":"http://elasticsearch:9200"}'
-      cerebro:9000/cluster_changes
+      http://cerebro:9000/cluster_changes
