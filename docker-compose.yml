@@ -22,3 +22,14 @@ services:
     user: ${UID}
     volumes:
       - ./data/cerebro:/var/lib/cerebro
+
+  client:
+    image: byrnedo/alpine-curl
+    links:
+      - cerebro
+    command: >
+      -H 'Content-type: application/json'
+      --silent
+      -XPOST
+      --data '{"host":"http://elasticsearch:9200"}'
+      cerebro:9000/cluster_changes

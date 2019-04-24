@@ -45,7 +45,13 @@ test-cli: bin/goss
 		bearstech/elasticsearch:latest \
 		goss --vars=vars.yml validate
 
-tests: test-cli
+test-cerebro:
+	docker-compose up -d cerebro
+	sleep 3
+	docker-compose up --exit-code-from client
+	docker-compose down
+
+tests: test-cli test-cerebro
 
 down:
 	@echo "ok"
