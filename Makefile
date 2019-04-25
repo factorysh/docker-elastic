@@ -28,7 +28,7 @@ bin/goss: bin
 	chmod +x bin/goss
 
 bin/wait-for: bin
-	curl -o bin/wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for
+	curl -o bin/wait-for https://raw.githubusercontent.com/factorysh/wait-for/master/wait-for
 	chmod +x bin/wait-for
 
 data/cerebro:
@@ -72,4 +72,4 @@ down:
 	@echo "ok"
 
 clean:
-	rm -rf data
+	rm -rf data bin
