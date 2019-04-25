@@ -8,7 +8,6 @@ services:
     volumes:
       - ./data/elasticsearch/lib:/var/lib/elasticsearch
       - ./data/elasticsearch/log:/var/log/elasticsearch
-    # user: ${UID}
     ports:
       - 9200
     hostname: elastic
@@ -19,6 +18,25 @@ services:
       - elasticsearch
     ports:
       - 9000
-    user: ${UID}
     volumes:
       - ./data/cerebro:/var/lib/cerebro
+
+  client:
+    image: byrnedo/alpine-curl
+    links:
+      - cerebro
+    entrypoint: ""
+    volumes:
+      - ./bin/wait-for:/usr/local/bin/wait-for
+    command: >
+      wait-for elasticsearch:9200 --timeout=120 --
+      wait-for cerebro:9000 --timeout=120 --
+      curl
+      -H "Content-type: application/json"
+      --silent
+      -XPOST
+      -v
+      --connect-timeout 5
+      --retry-max-time 120
+      --data '{"host":"http://elasticsearch:9200"}'
+      http://cerebro:9000/cluster_changes
