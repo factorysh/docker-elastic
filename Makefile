@@ -31,6 +31,15 @@ bin/wait-for: bin
 	curl -o bin/wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for
 	chmod +x bin/wait-for
 
+data/cerebro:
+	mkdir -p data/cerebro
+
+data/elasticsearch/lib:
+	mkdir -p data/elasticsearch/lib
+
+data/elasticsearch/log:
+	mkdir -p data/elasticsearch/log
+
 push:
 	docker push bearstech/elasticsearch:6
 	docker push bearstech/elasticsearch:latest
@@ -51,7 +60,7 @@ test-cli: bin/goss
 		bearstech/elasticsearch:latest \
 		goss --vars=vars.yml validate
 
-test-cerebro: bin/wait-for
+test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log
 	docker-compose down
 	docker-compose up -d cerebro
 	docker-compose up --exit-code-from client
