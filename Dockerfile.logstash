@@ -1,7 +1,5 @@
 FROM bearstech/elastic:6
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 EXPOSE 9600
 VOLUME /var/log/logstash
 VOLUME /var/lib/logstash

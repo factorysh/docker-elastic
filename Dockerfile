@@ -1,6 +1,5 @@
 FROM bearstech/elastic:6
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 EXPOSE 9200
 LABEL traefik.port=9200
 EXPOSE 9300
