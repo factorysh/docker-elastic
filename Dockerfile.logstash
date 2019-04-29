@@ -1,0 +1,24 @@
+FROM bearstech/java:1.8
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends apt-transport-https \
+    && wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
+    && echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" > /etc/apt/sources.list.d/elastic.list \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN adduser --uid 1001 --system logstash
+ENV LOGSTASH_VERSION=1:6.7.1-1
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends logstash=${LOGSTASH_VERSION} \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG GIT_VERSION
+LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
+
+EXPOSE 9600
+
+USER logstash

@@ -17,6 +17,14 @@ build-cerebro:
 		-f Dockerfile.cerebro \
 		.
 
+build-logstash:
+	docker build \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		-t bearstech/logstash:6 \
+		-f Dockerfile.logstash \
+		.
+	docker tag bearstech/logstash:6 bearstech/logstash:latest
+
 pull:
 	docker pull bearstech/java:latest
 
@@ -44,6 +52,8 @@ push:
 	docker push bearstech/elasticsearch:6
 	docker push bearstech/elasticsearch:latest
 	docker push bearstech/cerebro
+	docker push bearstech/logstash:6
+	docker push bearstech/logstash:latest
 
 up: .env
 	docker-compose up
