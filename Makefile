@@ -1,9 +1,15 @@
 GOSS_VERSION := 0.3.6
 GIT_VERSION := $(shell git rev-parse HEAD)
 
-build: build-es build-cerebro
+build: build-es build-cerebro build-logstash
 
-build-es:
+build-elastic:
+	docker build \
+		-t bearstech/elastic:6 \
+		-f Dockerfile.elastic \
+		.
+
+build-es: build-elastic
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		-t bearstech/elasticsearch:6 \
@@ -16,6 +22,14 @@ build-cerebro:
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		-f Dockerfile.cerebro \
 		.
+
+build-logstash: build-elastic
+	docker build \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		-t bearstech/logstash:6 \
+		-f Dockerfile.logstash \
+		.
+	docker tag bearstech/logstash:6 bearstech/logstash:latest
 
 pull:
 	docker pull bearstech/java:latest
@@ -44,6 +58,8 @@ push:
 	docker push bearstech/elasticsearch:6
 	docker push bearstech/elasticsearch:latest
 	docker push bearstech/cerebro
+	docker push bearstech/logstash:6
+	docker push bearstech/logstash:latest
 
 up: .env
 	docker-compose up
@@ -51,14 +67,14 @@ up: .env
 .env:
 	echo "UID=`id -u`\n" > .env
 
-test-cli: bin/goss
+test-elasticsearch: bin/goss
 	docker run \
 		--rm \
 		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
 		-v `pwd`/tests:/tests:ro \
 		-w /tests \
 		bearstech/elasticsearch:latest \
-		goss --vars=vars.yml validate
+		goss --vars=vars.yml -g elasticsearch.yml validate
 
 test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log
 	docker-compose down
@@ -66,7 +82,16 @@ test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearc
 	docker-compose up --exit-code-from client
 	docker-compose down
 
-tests: test-cli test-cerebro
+test-logstash: bin/goss
+	docker run \
+		--rm \
+		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
+		-v `pwd`/tests:/tests:ro \
+		-w /tests \
+		bearstech/logstash:latest \
+		goss --vars=vars.yml -g logstash.yml validate
+
+tests: test-elasticsearch test-cerebro test-logstash
 
 down:
 	@echo "ok"

@@ -1,0 +1,23 @@
+FROM bearstech/elastic:6
+
+EXPOSE 9600
+VOLUME /var/log/logstash
+VOLUME /var/lib/logstash
+ENV PATH=/usr/share/logstash/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV LS_HOME="/usr/share/logstash"
+ENV LS_SETTINGS_DIR="/etc/logstash"
+
+RUN adduser --uid 1001 --system --home /usr/share/logstash logstash
+
+ENV LOGSTASH_VERSION=1:6.7.1-1
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends logstash=${LOGSTASH_VERSION} \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG GIT_VERSION
+LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
+
+USER logstash
+
+CMD ["/usr/share/logstash/bin/logstash"]
