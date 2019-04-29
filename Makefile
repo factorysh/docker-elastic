@@ -61,14 +61,14 @@ up: .env
 .env:
 	echo "UID=`id -u`\n" > .env
 
-test-cli: bin/goss
+test-elasticsearch: bin/goss
 	docker run \
 		--rm \
 		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
 		-v `pwd`/tests:/tests:ro \
 		-w /tests \
 		bearstech/elasticsearch:latest \
-		goss --vars=vars.yml validate
+		goss --vars=vars.yml -g elasticsearch.yml validate
 
 test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log
 	docker-compose down
@@ -76,7 +76,16 @@ test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearc
 	docker-compose up --exit-code-from client
 	docker-compose down
 
-tests: test-cli test-cerebro
+test-logstash: bin/goss
+	docker run \
+		--rm \
+		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
+		-v `pwd`/tests:/tests:ro \
+		-w /tests \
+		bearstech/logstash:latest \
+		goss --vars=vars.yml -g logstash.yml validate
+
+tests: test-elasticsearch test-cerebro test-logstash
 
 down:
 	@echo "ok"

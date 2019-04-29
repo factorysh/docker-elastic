@@ -1,0 +1,7 @@
+---
+command:
+  "/usr/share/logstash/bin/logstash --version":
+    exit-status: 0
+    stdout:
+      - "/logstash {{ .Vars.logstash }}/"
+
