@@ -1,12 +1,6 @@
-FROM bearstech/java:1.8
+FROM bearstech/elastic:6
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends apt-transport-https \
-    && wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
-    && echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" > /etc/apt/sources.list.d/elastic.list \
-    && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 9600
 VOLUME /var/log/logstash
@@ -16,8 +10,8 @@ ENV LS_HOME="/usr/share/logstash"
 ENV LS_SETTINGS_DIR="/etc/logstash"
 
 RUN adduser --uid 1001 --system --home /usr/share/logstash logstash
-ENV LOGSTASH_VERSION=1:6.7.1-1
 
+ENV LOGSTASH_VERSION=1:6.7.1-1
 RUN apt-get update \
     && apt-get install -y --no-install-recommends logstash=${LOGSTASH_VERSION} \
     && apt-get clean \

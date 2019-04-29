@@ -1,0 +1,8 @@
+FROM bearstech/java:1.8
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends apt-transport-https \
+    && wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
+    && echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" > /etc/apt/sources.list.d/elastic.list \
+    && rm -rf /var/lib/apt/lists/*
+
