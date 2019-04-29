@@ -8,7 +8,14 @@ RUN apt-get update \
     && echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" > /etc/apt/sources.list.d/elastic.list \
     && rm -rf /var/lib/apt/lists/*
 
-RUN adduser --uid 1001 --system logstash
+EXPOSE 9600
+VOLUME /var/log/logstash
+VOLUME /var/lib/logstash
+ENV PATH=/usr/share/logstash/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV LS_HOME="/usr/share/logstash"
+ENV LS_SETTINGS_DIR="/etc/logstash"
+
+RUN adduser --uid 1001 --system --home /usr/share/logstash logstash
 ENV LOGSTASH_VERSION=1:6.7.1-1
 
 RUN apt-get update \
@@ -19,6 +26,6 @@ RUN apt-get update \
 ARG GIT_VERSION
 LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
 
-EXPOSE 9600
-
 USER logstash
+
+CMD ["/usr/share/logstash/bin/logstash"]
