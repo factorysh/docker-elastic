@@ -1,0 +1,9 @@
+FROM bearstech/elastic:6
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        kibana-oss \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG GIT_VERSION
+LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}

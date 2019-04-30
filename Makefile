@@ -1,7 +1,7 @@
 GOSS_VERSION := 0.3.6
 GIT_VERSION := $(shell git rev-parse HEAD)
 
-build: build-es build-cerebro build-logstash
+build: build-es build-cerebro build-logstash build-kibana
 
 build-elastic:
 	docker build \
@@ -37,6 +37,14 @@ build-logstash: build-elastic-java
 		-f Dockerfile.logstash \
 		.
 	docker tag bearstech/logstash:6 bearstech/logstash:latest
+
+build-kibana: build-elastic
+	docker build \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		-t bearstech/kibana:6 \
+		-f Dockerfile.kibana \
+		.
+	docker tag bearstech/kibana:6 bearstech/kibana:latest
 
 pull:
 	docker pull bearstech/java:latest
