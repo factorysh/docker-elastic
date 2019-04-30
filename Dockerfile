@@ -1,4 +1,4 @@
-FROM bearstech/elastic:6
+FROM bearstech/elastic-java:6
 
 EXPOSE 9200
 LABEL traefik.port=9200

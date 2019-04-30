@@ -3,13 +3,13 @@ GIT_VERSION := $(shell git rev-parse HEAD)
 
 build: build-es build-cerebro build-logstash
 
-build-elastic:
+build-elastic-java:
 	docker build \
-		-t bearstech/elastic:6 \
-		-f Dockerfile.elastic \
+		-t bearstech/elastic-java:6 \
+		-f Dockerfile.elastic-java \
 		.
 
-build-es: build-elastic
+build-es: build-elastic-java
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		-t bearstech/elasticsearch:6 \
@@ -23,7 +23,7 @@ build-cerebro:
 		-f Dockerfile.cerebro \
 		.
 
-build-logstash: build-elastic
+build-logstash: build-elastic-java
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		-t bearstech/logstash:6 \
