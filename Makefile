@@ -1,7 +1,7 @@
 GOSS_VERSION := 0.3.6
 GIT_VERSION := $(shell git rev-parse HEAD)
 
-build: build-es build-cerebro build-logstash build-kibana
+build: build-elasticsearch build-cerebro build-logstash build-kibana
 
 build-elastic:
 	docker build \
