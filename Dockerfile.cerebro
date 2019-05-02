@@ -12,8 +12,8 @@ RUN wget -O- https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VE
 EXPOSE 9000
 
 VOLUME /var/lib/cerebro
-COPY cerebro.conf /etc/cerebro.conf
-COPY logback.xml /opt/cerebro-${CEREBRO_VERSION}/conf/logback.xml
+COPY etc/cerebro/cerebro.conf /etc/cerebro.conf
+COPY etc/cerebro/logback.xml /opt/cerebro-${CEREBRO_VERSION}/conf/logback.xml
 USER cerebro
 
 ARG GIT_VERSION

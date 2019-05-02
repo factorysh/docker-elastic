@@ -1,7 +1,7 @@
 GOSS_VERSION := 0.3.6
 GIT_VERSION := $(shell git rev-parse HEAD)
 
-build: build-es build-cerebro build-logstash
+build: build-elasticsearch build-cerebro build-logstash build-kibana
 
 build-elastic:
 	docker build \
@@ -9,10 +9,17 @@ build-elastic:
 		-f Dockerfile.elastic \
 		.
 
-build-es: build-elastic
+build-elastic-java:
+	docker build \
+		-t bearstech/elastic-java:6 \
+		-f Dockerfile.elastic-java \
+		.
+
+build-elasticsearch: build-elastic-java
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		-t bearstech/elasticsearch:6 \
+		-f Dockerfile.elasticsearch \
 		.
 	docker tag bearstech/elasticsearch:6 bearstech/elasticsearch:latest
 
@@ -23,13 +30,21 @@ build-cerebro:
 		-f Dockerfile.cerebro \
 		.
 
-build-logstash: build-elastic
+build-logstash: build-elastic-java
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		-t bearstech/logstash:6 \
 		-f Dockerfile.logstash \
 		.
 	docker tag bearstech/logstash:6 bearstech/logstash:latest
+
+build-kibana: build-elastic
+	docker build \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		-t bearstech/kibana:6 \
+		-f Dockerfile.kibana \
+		.
+	docker tag bearstech/kibana:6 bearstech/kibana:latest
 
 pull:
 	docker pull bearstech/java:latest

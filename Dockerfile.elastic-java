@@ -1,4 +1,4 @@
-FROM bearstech/debian:stretch
+FROM bearstech/java:1.8
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \
@@ -6,6 +6,6 @@ RUN apt-get update \
         apt-transport-https \
         ca-certificates \
     && wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
-    && echo "deb https://artifacts.elastic.co/packages/oss-6.x/apt stable main" > /etc/apt/sources.list.d/elastic-oss.list \
+    && echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" > /etc/apt/sources.list.d/elastic.list \
     && rm -rf /var/lib/apt/lists/*
 
