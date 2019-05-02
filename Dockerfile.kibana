@@ -5,5 +5,8 @@ RUN apt-get update \
         kibana-oss \
     && rm -rf /var/lib/apt/lists/*
 
+VOLUME /var/lib/kibana
+EXPOSE 5601
+
 ARG GIT_VERSION
 LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
