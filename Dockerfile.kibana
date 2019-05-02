@@ -8,5 +8,12 @@ RUN apt-get update \
 VOLUME /var/lib/kibana
 EXPOSE 5601
 
+COPY etc/kibana/kibana.yml /etc/kibana/kibana.yml
+
+USER kibana
+
+ENV ELASTICSEARCH=http://elasticsearch:9200
 ARG GIT_VERSION
 LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
+
+CMD ["/usr/share/kibana/bin/kibana"]
