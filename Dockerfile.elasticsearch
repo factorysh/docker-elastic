@@ -9,7 +9,7 @@ ENV CLUSTER_NAME=docker
 
 RUN adduser --uid 1001 --system elasticsearch
 
-ENV ELASTICSEARCH_VERSION=6.7.1
+ENV ELASTICSEARCH_VERSION=6.7.2
 RUN apt-get update \
     && apt-get install -y --no-install-recommends elasticsearch=${ELASTICSEARCH_VERSION} \
     && apt-get clean \

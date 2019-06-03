@@ -69,12 +69,17 @@ data/elasticsearch/lib:
 data/elasticsearch/log:
 	mkdir -p data/elasticsearch/log
 
+data/kibana:
+	mkdir -p data/kibana
+
 push:
 	docker push bearstech/elasticsearch:6
 	docker push bearstech/elasticsearch:latest
 	docker push bearstech/cerebro
 	docker push bearstech/logstash:6
 	docker push bearstech/logstash:latest
+	docker push bearstech/kibana:6
+	docker push bearstech/kibana:latest
 
 up: .env
 	docker-compose up
@@ -91,10 +96,10 @@ test-elasticsearch: bin/goss
 		bearstech/elasticsearch:latest \
 		goss --vars=vars.yml -g elasticsearch.yml validate
 
-test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log
+test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
 	docker-compose down
 	docker-compose up -d cerebro
-	docker-compose up --exit-code-from client
+	docker-compose up --exit-code-from client client
 	docker-compose down
 
 test-logstash: bin/goss
