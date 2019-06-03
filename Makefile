@@ -99,7 +99,7 @@ test-elasticsearch: bin/goss
 test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
 	docker-compose down
 	docker-compose up -d cerebro
-	docker-compose up --exit-code-from client
+	docker-compose up --exit-code-from client client
 	docker-compose down
 
 test-logstash: bin/goss
