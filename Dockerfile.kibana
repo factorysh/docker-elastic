@@ -1,8 +1,9 @@
 FROM bearstech/elastic:6
 
+ENV KIBANA_VERSION=6.7.2
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        kibana-oss \
+        kibana-oss=${KIBANA_VERSION} \
     && rm -rf /var/lib/apt/lists/*
 
 VOLUME /var/lib/kibana

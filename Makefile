@@ -75,6 +75,8 @@ push:
 	docker push bearstech/cerebro
 	docker push bearstech/logstash:6
 	docker push bearstech/logstash:latest
+	docker push bearstech/kibana:6
+	docker push bearstech/kibana:latest
 
 up: .env
 	docker-compose up
