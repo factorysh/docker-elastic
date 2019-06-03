@@ -69,6 +69,9 @@ data/elasticsearch/lib:
 data/elasticsearch/log:
 	mkdir -p data/elasticsearch/log
 
+data/kibana:
+	mkdir -p data/kibana
+
 push:
 	docker push bearstech/elasticsearch:6
 	docker push bearstech/elasticsearch:latest
@@ -93,7 +96,7 @@ test-elasticsearch: bin/goss
 		bearstech/elasticsearch:latest \
 		goss --vars=vars.yml -g elasticsearch.yml validate
 
-test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log
+test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
 	docker-compose down
 	docker-compose up -d cerebro
 	docker-compose up --exit-code-from client
