@@ -1,4 +1,4 @@
-GOSS_VERSION := 0.3.6
+GOSS_VERSION := 0.3.7
 GIT_VERSION := $(shell git rev-parse HEAD)
 VERSION6 := 6.7.2
 VERSION7 := 7.3.2
