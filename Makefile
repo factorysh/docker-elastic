@@ -138,7 +138,10 @@ push7:
 	docker push bearstech/kibana:latest
 
 up: .env
-	docker-compose up
+	ELASTIC_MAJOR=7 docker-compose up \
+		--remove-orphans \
+		--detach \
+	kibana cerebro
 
 .env:
 	echo "UID=`id -u`\n" > .env

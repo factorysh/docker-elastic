@@ -4,7 +4,7 @@ version: "3"
 
 services:
   elasticsearch:
-    image: bearstech/elasticsearch:latest
+    image: bearstech/elasticsearch:${ELASTIC_MAJOR:-7}
     volumes:
       - ./data/elasticsearch/lib:/var/lib/elasticsearch
       - ./data/elasticsearch/log:/var/log/elasticsearch
@@ -22,7 +22,7 @@ services:
       - ./data/cerebro:/var/lib/cerebro
 
   kibana:
-    image: bearstech/kibana:latest
+    image: bearstech/kibana:${ELASTIC_MAJOR:-7}
     links:
       - elasticsearch
     ports:
