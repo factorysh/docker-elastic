@@ -1,10 +1,12 @@
 GOSS_VERSION := 0.3.6
 GIT_VERSION := $(shell git rev-parse HEAD)
 VERSION6 := 6.7.2
+VERSION7 := 7.3.2
 
-build: build6 build-cerebro
+build: build6 build7 build-cerebro
 
 build6: build-elasticsearch6 build-logstash6 build-kibana6
+build7: build-elasticsearch7 build-logstash7 build-kibana7
 
 build-elastic6:
 	docker build \
@@ -12,20 +14,43 @@ build-elastic6:
 		-f Dockerfile.elastic \
 		.
 
-build-elastic-java6:
+build-elastic7:
+	docker build \
+		--build-arg ELASTIC_MAJOR=7 \
+		-t bearstech/elastic:7 \
+		-f Dockerfile.elastic \
+		.
+
+build-elastic6-java:
 	docker build \
 		-t bearstech/elastic-java:6 \
 		-f Dockerfile.elastic-java \
 		.
 
-build-elasticsearch6: build-elastic-java6
+build-elastic7-java:
+	docker build \
+		--build-arg ELASTIC_MAJOR=7 \
+		-t bearstech/elastic-java:7 \
+		-f Dockerfile.elastic-java \
+		.
+
+build-elasticsearch6: build-elastic6-java
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		--build-arg ELASTICSEARCH_VERSION=${VERSION6} \
 		-t bearstech/elasticsearch:6 \
 		-f Dockerfile.elasticsearch \
 		.
-	docker tag bearstech/elasticsearch:6 bearstech/elasticsearch:latest
+
+build-elasticsearch7: build-elastic7-java
+	docker build \
+		--build-arg ELASTIC_MAJOR=7 \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		--build-arg ELASTICSEARCH_VERSION=${VERSION7} \
+		-t bearstech/elasticsearch:7 \
+		-f Dockerfile.elasticsearch \
+		.
+	docker tag bearstech/elasticsearch:7 bearstech/elasticsearch:latest
 
 build-cerebro:
 	docker build \
@@ -34,20 +59,38 @@ build-cerebro:
 		-f Dockerfile.cerebro \
 		.
 
-build-logstash6: build-elastic-java6
+build-logstash6: build-elastic6-java
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		--build-arg LOGSTASH_VERSION=1:${VERSION6}-1 \
 		-t bearstech/logstash:6 \
 		-f Dockerfile.logstash \
 		.
-	docker tag bearstech/logstash:6 bearstech/logstash:latest
+
+build-logstash7: build-elastic7-java
+	docker build \
+		--build-arg ELASTIC_MAJOR=7 \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		--build-arg LOGSTASH_VERSION=1:${VERSION7}-1 \
+		-t bearstech/logstash:7 \
+		-f Dockerfile.logstash \
+		.
+	docker tag bearstech/logstash:7 bearstech/logstash:latest
 
 build-kibana6: build-elastic6
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
 		--build-arg KIBANA_VERSION=${VERSION6} \
 		-t bearstech/kibana:6 \
+		-f Dockerfile.kibana \
+		.
+
+build-kibana7: build-elastic7
+	docker build \
+		--build-arg ELASTIC_MAJOR=7 \
+		--build-arg GIT_VERSION=${GIT_VERSION} \
+		--build-arg KIBANA_VERSION=${VERSION7} \
+		-t bearstech/kibana:7 \
 		-f Dockerfile.kibana \
 		.
 	docker tag bearstech/kibana:6 bearstech/kibana:latest
@@ -78,15 +121,20 @@ data/elasticsearch/log:
 data/kibana:
 	mkdir -p data/kibana
 
-push: push6
+push: push6 push7
+	docker push bearstech/cerebro
 
 push6:
 	docker push bearstech/elasticsearch:6
-	docker push bearstech/elasticsearch:latest
-	docker push bearstech/cerebro
 	docker push bearstech/logstash:6
-	docker push bearstech/logstash:latest
 	docker push bearstech/kibana:6
+
+push7:
+	docker push bearstech/elasticsearch:7
+	docker push bearstech/elasticsearch:latest
+	docker push bearstech/logstash:7
+	docker push bearstech/logstash:latest
+	docker push bearstech/kibana:7
 	docker push bearstech/kibana:latest
 
 up: .env
@@ -102,7 +150,16 @@ test-elasticsearch6: bin/goss
 		-v `pwd`/tests:/tests:ro \
 		-w /tests \
 		bearstech/elasticsearch:6 \
-		goss --vars=vars.yml -g elasticsearch.yml validate
+		goss --vars=vars6.yml -g elasticsearch.yml validate
+
+test-elasticsearch7: bin/goss
+	docker run \
+		--rm \
+		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
+		-v `pwd`/tests:/tests:ro \
+		-w /tests \
+		bearstech/elasticsearch:7 \
+		goss --vars=vars7.yml -g elasticsearch.yml validate
 
 test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
 	docker-compose down
@@ -117,10 +174,20 @@ test-logstash6: bin/goss
 		-v `pwd`/tests:/tests:ro \
 		-w /tests \
 		bearstech/logstash:6 \
-		goss --vars=vars.yml -g logstash.yml validate
+		goss --vars=vars6.yml -g logstash.yml validate
 
-tests: tests6 test-cerebro
+test-logstash7: bin/goss
+	docker run \
+		--rm \
+		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
+		-v `pwd`/tests:/tests:ro \
+		-w /tests \
+		bearstech/logstash:7 \
+		goss --vars=vars7.yml -g logstash.yml validate
+
+tests: tests6 tests7 test-cerebro
 tests6: test-elasticsearch6 test-logstash6
+tests7: test-elasticsearch7 test-logstash7
 
 down:
 	@echo "ok"
