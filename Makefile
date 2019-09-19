@@ -164,10 +164,16 @@ test-elasticsearch7: bin/goss
 		bearstech/elasticsearch:7 \
 		goss --vars=vars7.yml -g elasticsearch.yml validate
 
-test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
+test-cerebro6: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
 	docker-compose down
-	docker-compose up -d cerebro
-	docker-compose up --exit-code-from client client
+	ELASTIC_MAJOR=6 docker-compose up -d cerebro
+	ELASTIC_MAJOR=6 docker-compose up --exit-code-from client client
+	docker-compose down
+
+test-cerebro7: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
+	docker-compose down
+	ELASTIC_MAJOR=7 docker-compose up -d cerebro
+	ELASTIC_MAJOR=7 docker-compose up --exit-code-from client client
 	docker-compose down
 
 test-logstash6: bin/goss
@@ -188,9 +194,9 @@ test-logstash7: bin/goss
 		bearstech/logstash:7 \
 		goss --vars=vars7.yml -g logstash.yml validate
 
-tests: tests6 tests7 test-cerebro
-tests6: test-elasticsearch6 test-logstash6
-tests7: test-elasticsearch7 test-logstash7
+tests: tests6 tests7
+tests6: test-elasticsearch6 test-logstash6 test-cerebro6
+tests7: test-elasticsearch7 test-logstash7 test-cerebro7
 
 down:
 	@echo "ok"
