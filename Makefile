@@ -1,23 +1,27 @@
 GOSS_VERSION := 0.3.6
 GIT_VERSION := $(shell git rev-parse HEAD)
+VERSION6 := 6.7.2
 
-build: build-elasticsearch build-cerebro build-logstash build-kibana
+build: build6 build-cerebro
 
-build-elastic:
+build6: build-elasticsearch6 build-logstash6 build-kibana6
+
+build-elastic6:
 	docker build \
 		-t bearstech/elastic:6 \
 		-f Dockerfile.elastic \
 		.
 
-build-elastic-java:
+build-elastic-java6:
 	docker build \
 		-t bearstech/elastic-java:6 \
 		-f Dockerfile.elastic-java \
 		.
 
-build-elasticsearch: build-elastic-java
+build-elasticsearch6: build-elastic-java6
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
+		--build-arg ELASTICSEARCH_VERSION=${VERSION6} \
 		-t bearstech/elasticsearch:6 \
 		-f Dockerfile.elasticsearch \
 		.
@@ -30,17 +34,19 @@ build-cerebro:
 		-f Dockerfile.cerebro \
 		.
 
-build-logstash: build-elastic-java
+build-logstash6: build-elastic-java6
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
+		--build-arg LOGSTASH_VERSION=1:${VERSION6}-1 \
 		-t bearstech/logstash:6 \
 		-f Dockerfile.logstash \
 		.
 	docker tag bearstech/logstash:6 bearstech/logstash:latest
 
-build-kibana: build-elastic
+build-kibana6: build-elastic6
 	docker build \
 		--build-arg GIT_VERSION=${GIT_VERSION} \
+		--build-arg KIBANA_VERSION=${VERSION6} \
 		-t bearstech/kibana:6 \
 		-f Dockerfile.kibana \
 		.
@@ -72,7 +78,9 @@ data/elasticsearch/log:
 data/kibana:
 	mkdir -p data/kibana
 
-push:
+push: push6
+
+push6:
 	docker push bearstech/elasticsearch:6
 	docker push bearstech/elasticsearch:latest
 	docker push bearstech/cerebro
@@ -87,13 +95,13 @@ up: .env
 .env:
 	echo "UID=`id -u`\n" > .env
 
-test-elasticsearch: bin/goss
+test-elasticsearch6: bin/goss
 	docker run \
 		--rm \
 		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
 		-v `pwd`/tests:/tests:ro \
 		-w /tests \
-		bearstech/elasticsearch:latest \
+		bearstech/elasticsearch:6 \
 		goss --vars=vars.yml -g elasticsearch.yml validate
 
 test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
@@ -102,16 +110,17 @@ test-cerebro: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearc
 	docker-compose up --exit-code-from client client
 	docker-compose down
 
-test-logstash: bin/goss
+test-logstash6: bin/goss
 	docker run \
 		--rm \
 		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
 		-v `pwd`/tests:/tests:ro \
 		-w /tests \
-		bearstech/logstash:latest \
+		bearstech/logstash:6 \
 		goss --vars=vars.yml -g logstash.yml validate
 
-tests: test-elasticsearch test-cerebro test-logstash
+tests: tests6 test-cerebro
+tests6: test-elasticsearch6 test-logstash6
 
 down:
 	@echo "ok"
