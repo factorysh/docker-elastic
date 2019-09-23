@@ -209,8 +209,8 @@ test-logstash7: bin/goss
 		goss --vars=vars7.yml -g logstash.yml validate
 
 tests: tests6 tests7
-tests6: test-elasticsearch6 test-logstash6# test-cerebro6
-tests7: test-elasticsearch7 test-logstash7# test-cerebro7
+tests6: test-elasticsearch6 test-logstash6 test-cerebro6
+tests7: test-elasticsearch7 test-logstash7 test-cerebro7
 
 down:
 	@echo "ok"
