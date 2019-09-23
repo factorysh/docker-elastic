@@ -9,12 +9,14 @@ build6: build-elasticsearch6 build-logstash6 build-kibana6
 build7: build-elasticsearch7 build-logstash7 build-kibana7
 
 build-elastic6:
+	ELASTIC_MAJOR=6 \
 	docker build \
 		-t bearstech/elastic:6 \
 		-f Dockerfile.elastic \
 		.
 
 build-elastic7:
+	ELASTIC_MAJOR=7 \
 	docker build \
 		--build-arg ELASTIC_MAJOR=7 \
 		-t bearstech/elastic:7 \
@@ -147,6 +149,8 @@ up: .env
 	echo "UID=`id -u`\n" > .env
 
 test-elasticsearch6: bin/goss
+	rm -rf data/elasticsearch
+	mkdir -p data/elasticsearch
 	docker run \
 		--rm \
 		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
@@ -156,6 +160,8 @@ test-elasticsearch6: bin/goss
 		goss --vars=vars6.yml -g elasticsearch.yml validate
 
 test-elasticsearch7: bin/goss
+	rm -rf data/elasticsearch
+	mkdir -p data/elasticsearch
 	docker run \
 		--rm \
 		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
