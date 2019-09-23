@@ -6,7 +6,6 @@ LABEL traefik.port=9200
 EXPOSE 9300
 VOLUME /var/lib/elasticsearch
 VOLUME /var/log/elasticsearch
-ENV CLUSTER_NAME=docker
 
 RUN adduser --uid 1001 --system elasticsearch
 
@@ -24,5 +23,9 @@ USER elasticsearch
 
 ARG GIT_VERSION
 LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
+
+ENV CLUSTER_NAME=docker
+ENV CLUSTER_INITIAL_MASTER_NODES=elasticsearch
+
 
 CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
