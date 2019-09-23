@@ -112,12 +112,6 @@ bin/wait-for: bin
 data/cerebro:
 	mkdir -p data/cerebro
 
-data/elasticsearch/lib:
-	mkdir -p data/elasticsearch/lib
-
-data/elasticsearch/log:
-	mkdir -p data/elasticsearch/log
-
 data/kibana:
 	mkdir -p data/kibana
 
@@ -146,10 +140,10 @@ up: .env
 .env:
 	echo "UID=`id -u`\n" > .env
 
-test-elasticsearch6: bin/wait-for bin/goss
+test-elasticsearch6: bin/wait-for bin/goss .env
 	docker-compose down
 	rm -rf data/elasticsearch
-	mkdir -p data/elasticsearch
+	mkdir -p data/elasticsearch/{lib,log}
 	docker run \
 		--rm \
 		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
@@ -160,10 +154,10 @@ test-elasticsearch6: bin/wait-for bin/goss
 	ELASTIC_MAJOR=6 docker-compose up client_es
 	docker-compose down
 
-test-elasticsearch7: bin/wait-for bin/goss
+test-elasticsearch7: bin/wait-for bin/goss .env
 	docker-compose down
 	rm -rf data/elasticsearch
-	mkdir -p data/elasticsearch
+	mkdir -p data/elasticsearch/{lib,log}
 	docker run \
 		--rm \
 		-v `pwd`/bin/goss:/usr/local/bin/goss:ro \
@@ -174,18 +168,18 @@ test-elasticsearch7: bin/wait-for bin/goss
 	ELASTIC_MAJOR=7 docker-compose up client_es
 	docker-compose down
 
-test-cerebro6: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
+test-cerebro6: bin/wait-for data/cerebro data/kibana .env
 	docker-compose down
 	rm -rf data/elasticsearch
-	mkdir -p data/elasticsearch
+	mkdir -p data/elasticsearch/{lib,log}
 	ELASTIC_MAJOR=6 docker-compose up -d cerebro
 	ELASTIC_MAJOR=6 docker-compose logs -f elasticsearch && docker-compose up --exit-code-from client client
 	docker-compose down
 
-test-cerebro7: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
+test-cerebro7: bin/wait-for data/cerebro data/kibana .env
 	docker-compose down
 	rm -rf data/elasticsearch
-	mkdir -p data/elasticsearch
+	mkdir -p data/elasticsearch/{lib,log}
 	ELASTIC_MAJOR=7 docker-compose up -d cerebro
 	ELASTIC_MAJOR=7 docker-compose logs -f elasticsearch && docker-compose up --exit-code-from client client
 	docker-compose down
