@@ -146,7 +146,7 @@ up: .env
 .env:
 	echo "UID=`id -u`\n" > .env
 
-test-elasticsearch6: bin/goss
+test-elasticsearch6: bin/waitfor bin/goss
 	docker-compose down
 	rm -rf data/elasticsearch
 	mkdir -p data/elasticsearch
@@ -160,7 +160,7 @@ test-elasticsearch6: bin/goss
 	ELASTIC_MAJOR=6 docker-compose up client_es
 	docker-compose down
 
-test-elasticsearch7: bin/goss
+test-elasticsearch7: bin/waitfor bin/goss
 	docker-compose down
 	rm -rf data/elasticsearch
 	mkdir -p data/elasticsearch
