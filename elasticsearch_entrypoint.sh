@@ -8,7 +8,7 @@ echo "$@"
 if [ "$1" = '/usr/share/elasticsearch/bin/elasticsearch' ]; then
     echo "Elasticsearch"
     usermod -o -u "$ID" elasticsearch
-    chown -R elasticsearch /etc/default/elasticsearch /etc/elasticsearch/
+    chown -R elasticsearch /etc/default/elasticsearch /etc/elasticsearch/ /var/log/elasticsearch /var/lib/elasticsearch
     exec gosu elasticsearch "$@"
 else
     # As argument is not related to elasticsearch,
