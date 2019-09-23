@@ -4,10 +4,14 @@ version: "3"
 
 services:
   elasticsearch:
-    image: bearstech/elasticsearch:latest
+    image: bearstech/elasticsearch:${ELASTIC_MAJOR:-7}
     volumes:
       - ./data/elasticsearch/lib:/var/lib/elasticsearch
       - ./data/elasticsearch/log:/var/log/elasticsearch
+    environment:
+      DISCOVERY_TYPE: single-node
+      ES_JAVA_OPTS: "-Xms500m -Xmx500m"
+      ID: "${UID}"
     ports:
       - 9200
     hostname: elastic
@@ -22,7 +26,7 @@ services:
       - ./data/cerebro:/var/lib/cerebro
 
   kibana:
-    image: bearstech/kibana:latest
+    image: bearstech/kibana:${ELASTIC_MAJOR:-7}
     links:
       - elasticsearch
     ports:
@@ -49,3 +53,14 @@ services:
       --retry-max-time 120
       --data '{"host":"http://elasticsearch:9200"}'
       http://cerebro:9000/cluster_changes
+
+  client_es:
+    image: byrnedo/alpine-curl
+    links:
+      - elasticsearch
+    entrypoint: ""
+    volumes:
+      - ./bin/wait-for:/usr/local/bin/wait-for
+    command: >
+      wait-for elasticsearch:9200 --timeout=300 --
+      curl http://elasticsearch:9200

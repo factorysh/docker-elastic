@@ -1,27 +1,36 @@
-FROM bearstech/elastic-java:6
+ARG ELASTIC_MAJOR=6
+FROM bearstech/elastic-java:${ELASTIC_MAJOR}
+ARG ELASTIC_MAJOR=6
 
 EXPOSE 9200
 LABEL traefik.port=9200
 EXPOSE 9300
 VOLUME /var/lib/elasticsearch
 VOLUME /var/log/elasticsearch
-ENV CLUSTER_NAME=docker
 
 RUN adduser --uid 1001 --system elasticsearch
 
-ENV ELASTICSEARCH_VERSION=6.7.2
+ARG ELASTICSEARCH_VERSION=6.7.2
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends elasticsearch=${ELASTICSEARCH_VERSION} \
+    && apt-get install -y --no-install-recommends \
+    elasticsearch=${ELASTICSEARCH_VERSION} \
+    gosu \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
-RUN chown -R elasticsearch /etc/default/elasticsearch /etc/elasticsearch/ \
-    && chmod 400 /etc/default/elasticsearch /etc/elasticsearch/elasticsearch.yml
-
-USER elasticsearch
+COPY etc/elasticsearch/elasticsearch_${ELASTIC_MAJOR}.yml /etc/elasticsearch/elasticsearch.yml
+RUN chmod 400 /etc/default/elasticsearch /etc/elasticsearch/elasticsearch.yml
+COPY elasticsearch_entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ARG GIT_VERSION
 LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
+
+ENV CLUSTER_NAME=docker
+ENV CLUSTER_INITIAL_MASTER_NODES=elasticsearch
+ENV ES_JAVA_OPTS="-Xms2g -Xmx2g"
+ENV DISCOVERY_TYPE=zen
+ENV ID=1001
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
