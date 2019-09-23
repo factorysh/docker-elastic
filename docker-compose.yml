@@ -8,6 +8,9 @@ services:
     volumes:
       - ./data/elasticsearch/lib:/var/lib/elasticsearch
       - ./data/elasticsearch/log:/var/log/elasticsearch
+    environment:
+      DISCOVERY_TYPE: single-node
+      ES_JAVA_OPTS: "-Xms0.5g -Xmx0.5g"
     ports:
       - 9200
     hostname: elastic
