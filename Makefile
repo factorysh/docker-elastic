@@ -169,12 +169,16 @@ test-elasticsearch7: bin/goss
 		goss --vars=vars7.yml -g elasticsearch.yml validate
 
 test-cerebro6: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
+	rm -rf data/elasticsearch
+	mkdir -p data/elasticsearch
 	docker-compose down
 	ELASTIC_MAJOR=6 docker-compose up -d cerebro
 	ELASTIC_MAJOR=6 docker-compose up --exit-code-from client client
 	docker-compose down
 
 test-cerebro7: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
+	rm -rf data/elasticsearch
+	mkdir -p data/elasticsearch
 	docker-compose down
 	ELASTIC_MAJOR=7 docker-compose up -d cerebro
 	ELASTIC_MAJOR=7 docker-compose up --exit-code-from client client
