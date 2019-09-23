@@ -34,6 +34,7 @@ services:
     image: byrnedo/alpine-curl
     links:
       - cerebro
+      - elasticsearch
     entrypoint: ""
     volumes:
       - ./bin/wait-for:/usr/local/bin/wait-for
