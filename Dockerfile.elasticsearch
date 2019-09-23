@@ -27,6 +27,6 @@ LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/c
 
 ENV CLUSTER_NAME=docker
 ENV CLUSTER_INITIAL_MASTER_NODES=elasticsearch
-
+ENV ES_JAVA_OPTS="-Xms2g -Xmx2g"
 
 CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
