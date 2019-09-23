@@ -8,10 +8,10 @@ services:
     volumes:
       - ./data/elasticsearch/lib:/var/lib/elasticsearch
       - ./data/elasticsearch/log:/var/log/elasticsearch
-    user: "${UID}"
     environment:
       DISCOVERY_TYPE: single-node
       ES_JAVA_OPTS: "-Xms500m -Xmx500m"
+      ID: "${UID}"
     ports:
       - 9200
     hostname: elastic
@@ -24,7 +24,6 @@ services:
       - 9000
     volumes:
       - ./data/cerebro:/var/lib/cerebro
-    user: "${UID}"
 
   kibana:
     image: bearstech/kibana:${ELASTIC_MAJOR:-7}
@@ -34,7 +33,6 @@ services:
       - 5601
     volumes:
       - ./data/kibana:/var/lib/kibana
-    user: "${UID}"
 
   client:
     image: byrnedo/alpine-curl
