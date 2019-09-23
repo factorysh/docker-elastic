@@ -2,5 +2,6 @@
 command:
   "/usr/share/elasticsearch/bin/elasticsearch --version":
     exit-status: 0
+    timeout: 30000 # in ms
     stdout:
       - "/Version: {{ .Vars.elasticsearch }}/"
