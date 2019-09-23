@@ -37,7 +37,6 @@ services:
     image: byrnedo/alpine-curl
     links:
       - cerebro
-      - elasticsearch
     entrypoint: ""
     volumes:
       - ./bin/wait-for:/usr/local/bin/wait-for
@@ -53,3 +52,14 @@ services:
       --retry-max-time 120
       --data '{"host":"http://elasticsearch:9200"}'
       http://cerebro:9000/cluster_changes
+
+  client_es:
+    image: byrnedo/alpine-curl
+    links:
+      - elasticsearch
+    entrypoint: ""
+    volumes:
+      - ./bin/wait-for:/usr/local/bin/wait-for
+    command: >
+      wait-for elasticsearch:9200 --timeout=300 --
+      curl http://elasticsearch:9200

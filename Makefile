@@ -147,6 +147,7 @@ up: .env
 	echo "UID=`id -u`\n" > .env
 
 test-elasticsearch6: bin/goss
+	docker-compose down
 	rm -rf data/elasticsearch
 	mkdir -p data/elasticsearch
 	docker run \
@@ -156,8 +157,11 @@ test-elasticsearch6: bin/goss
 		-w /tests \
 		bearstech/elasticsearch:6 \
 		goss --vars=vars6.yml -g elasticsearch.yml validate
+	ELASTIC_MAJOR=6 docker-compose up client_es
+	docker-compose down
 
 test-elasticsearch7: bin/goss
+	docker-compose down
 	rm -rf data/elasticsearch
 	mkdir -p data/elasticsearch
 	docker run \
@@ -167,6 +171,8 @@ test-elasticsearch7: bin/goss
 		-w /tests \
 		bearstech/elasticsearch:7 \
 		goss --vars=vars7.yml -g elasticsearch.yml validate
+	ELASTIC_MAJOR=7 docker-compose up client_es
+	docker-compose down
 
 test-cerebro6: bin/wait-for data/cerebro data/elasticsearch/lib data/elasticsearch/log data/kibana
 	rm -rf data/elasticsearch
