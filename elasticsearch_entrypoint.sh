@@ -7,7 +7,7 @@ echo "$@"
 # Drop root privileges if we are running elasticsearch
 if [ "$1" = '/usr/share/elasticsearch/bin/elasticsearch' ]; then
     echo "Elasticsearch"
-    usermod -o -u $ID elasticsearch
+    usermod -o -u "$ID" elasticsearch
     chown -R elasticsearch /etc/default/elasticsearch /etc/elasticsearch/
     exec gosu elasticsearch "$@"
 else
