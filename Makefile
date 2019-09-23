@@ -9,14 +9,12 @@ build6: build-elasticsearch6 build-logstash6 build-kibana6
 build7: build-elasticsearch7 build-logstash7 build-kibana7
 
 build-elastic6:
-	ELASTIC_MAJOR=6 \
 	docker build \
 		-t bearstech/elastic:6 \
 		-f Dockerfile.elastic \
 		.
 
 build-elastic7:
-	ELASTIC_MAJOR=7 \
 	docker build \
 		--build-arg ELASTIC_MAJOR=7 \
 		-t bearstech/elastic:7 \
