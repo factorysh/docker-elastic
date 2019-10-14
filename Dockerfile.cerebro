@@ -16,8 +16,22 @@ COPY etc/cerebro/cerebro.conf /etc/cerebro.conf
 COPY etc/cerebro/logback.xml /opt/cerebro-${CEREBRO_VERSION}/conf/logback.xml
 USER cerebro
 
-ARG GIT_VERSION
-LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
 
 CMD ["/opt/cerebro/bin/cerebro", "-Dhttp.port=9000", "-Dhttp.address=0.0.0.0",\
     "-Dconfig.file=/etc/cerebro.conf" ]
+
+# generated labels
+
+ARG GIT_VERSION
+ARG GIT_DATE
+ARG BUILD_DATE
+
+LABEL com.bearstech.image.revision_date=${GIT_DATE}
+
+LABEL org.opencontainers.image.authors=Bearstech
+
+LABEL org.opencontainers.image.revision=${GIT_VERSION}
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+
+LABEL org.opencontainers.image.url=https://github.com/factorysh/docker-elastic
+LABEL org.opencontainers.image.source=https://github.com/factorysh/docker-elastic/blob/${GIT_VERSION}/Dockerfile.cerebro
