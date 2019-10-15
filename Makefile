@@ -1,5 +1,7 @@
+
+include Makefile.build_args
+
 GOSS_VERSION := 0.3.7
-GIT_VERSION := $(shell git rev-parse HEAD)
 VERSION6 := 6.7.2
 VERSION7 := 7.3.2
 
@@ -9,43 +11,47 @@ build6: build-elasticsearch6 build-logstash6 build-kibana6
 build7: build-elasticsearch7 build-logstash7 build-kibana7
 
 build-elastic6:
-	docker build \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		-t bearstech/elastic:6 \
 		-f Dockerfile.elastic \
 		.
 
 build-elastic7:
-	docker build \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		--build-arg ELASTIC_MAJOR=7 \
 		-t bearstech/elastic:7 \
 		-f Dockerfile.elastic \
 		.
 
 build-elastic6-java:
-	docker build \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		-t bearstech/elastic-java:6 \
 		-f Dockerfile.elastic-java \
 		.
 
 build-elastic7-java:
-	docker build \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		--build-arg ELASTIC_MAJOR=7 \
 		-t bearstech/elastic-java:7 \
 		-f Dockerfile.elastic-java \
 		.
 
 build-elasticsearch6: build-elastic6-java
-	docker build \
-		--build-arg GIT_VERSION=${GIT_VERSION} \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		--build-arg ELASTICSEARCH_VERSION=${VERSION6} \
 		-t bearstech/elasticsearch:6 \
 		-f Dockerfile.elasticsearch \
 		.
 
 build-elasticsearch7: build-elastic7-java
-	docker build \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		--build-arg ELASTIC_MAJOR=7 \
-		--build-arg GIT_VERSION=${GIT_VERSION} \
 		--build-arg ELASTICSEARCH_VERSION=${VERSION7} \
 		-t bearstech/elasticsearch:7 \
 		-f Dockerfile.elasticsearch \
@@ -53,24 +59,24 @@ build-elasticsearch7: build-elastic7-java
 	docker tag bearstech/elasticsearch:7 bearstech/elasticsearch:latest
 
 build-cerebro:
-	docker build \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		-t bearstech/cerebro \
-		--build-arg GIT_VERSION=${GIT_VERSION} \
 		-f Dockerfile.cerebro \
 		.
 
 build-logstash6: build-elastic6-java
-	docker build \
-		--build-arg GIT_VERSION=${GIT_VERSION} \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		--build-arg LOGSTASH_VERSION=1:${VERSION6}-1 \
 		-t bearstech/logstash:6 \
 		-f Dockerfile.logstash \
 		.
 
 build-logstash7: build-elastic7-java
-	docker build \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		--build-arg ELASTIC_MAJOR=7 \
-		--build-arg GIT_VERSION=${GIT_VERSION} \
 		--build-arg LOGSTASH_VERSION=1:${VERSION7}-1 \
 		-t bearstech/logstash:7 \
 		-f Dockerfile.logstash \
@@ -78,17 +84,17 @@ build-logstash7: build-elastic7-java
 	docker tag bearstech/logstash:7 bearstech/logstash:latest
 
 build-kibana6: build-elastic6
-	docker build \
-		--build-arg GIT_VERSION=${GIT_VERSION} \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		--build-arg KIBANA_VERSION=${VERSION6} \
 		-t bearstech/kibana:6 \
 		-f Dockerfile.kibana \
 		.
 
 build-kibana7: build-elastic7
-	docker build \
+	 docker build \
+		$(DOCKER_BUILD_ARGS) \
 		--build-arg ELASTIC_MAJOR=7 \
-		--build-arg GIT_VERSION=${GIT_VERSION} \
 		--build-arg KIBANA_VERSION=${VERSION7} \
 		-t bearstech/kibana:7 \
 		-f Dockerfile.kibana \

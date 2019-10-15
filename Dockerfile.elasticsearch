@@ -22,8 +22,6 @@ COPY etc/elasticsearch/elasticsearch_${ELASTIC_MAJOR}.yml /etc/elasticsearch/ela
 RUN chmod 400 /etc/default/elasticsearch /etc/elasticsearch/elasticsearch.yml
 COPY elasticsearch_entrypoint.sh /usr/local/bin/entrypoint.sh
 
-ARG GIT_VERSION
-LABEL com.bearstech.source.elastic=https://github.com/factorysh/docker-elastic/commit/${GIT_VERSION}
 
 ENV CLUSTER_NAME=docker
 ENV CLUSTER_INITIAL_MASTER_NODES=elasticsearch
@@ -34,3 +32,19 @@ ENV ID=1001
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
+
+# generated labels
+
+ARG GIT_VERSION
+ARG GIT_DATE
+ARG BUILD_DATE
+
+LABEL com.bearstech.image.revision_date=${GIT_DATE}
+
+LABEL org.opencontainers.image.authors=Bearstech
+
+LABEL org.opencontainers.image.revision=${GIT_VERSION}
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+
+LABEL org.opencontainers.image.url=https://github.com/factorysh/docker-elastic
+LABEL org.opencontainers.image.source=https://github.com/factorysh/docker-elastic/blob/${GIT_VERSION}/Dockerfile.elasticsearch
