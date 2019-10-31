@@ -178,7 +178,10 @@ test-elasticsearch7: bin/wait-for bin/goss .env
 test-cerebro6: bin/wait-for data/cerebro data/kibana .env
 	docker-compose down
 	rm -rf data/elasticsearch
+	rm -rf data/cerebro
 	mkdir -p data/elasticsearch/{lib,log}
+	mkdir -p data/cerebro
+	chmod 777 data/cerebro
 	ELASTIC_MAJOR=6 docker-compose up -d cerebro
 	ELASTIC_MAJOR=6 docker-compose up --exit-code-from client client
 	docker-compose down
@@ -186,7 +189,10 @@ test-cerebro6: bin/wait-for data/cerebro data/kibana .env
 test-cerebro7: bin/wait-for data/cerebro data/kibana .env
 	docker-compose down
 	rm -rf data/elasticsearch
+	rm -rf data/cerebro
 	mkdir -p data/elasticsearch/{lib,log}
+	mkdir -p data/cerebro
+	chmod 777 data/cerebro
 	ELASTIC_MAJOR=7 docker-compose up -d cerebro
 	ELASTIC_MAJOR=7 docker-compose up --exit-code-from client client
 	docker-compose down
