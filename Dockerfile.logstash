@@ -10,7 +10,7 @@ ENV LS_SETTINGS_DIR="/etc/logstash"
 
 RUN adduser --uid 1001 --system --home /usr/share/logstash logstash
 
-ARG LOGSTASH_VERSION=1:6.7.2-1
+ARG LOGSTASH_VERSION
 RUN apt-get update \
     && apt-get install -y --no-install-recommends logstash=${LOGSTASH_VERSION} \
     && apt-get clean \
