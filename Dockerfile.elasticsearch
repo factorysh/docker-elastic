@@ -10,7 +10,7 @@ VOLUME /var/log/elasticsearch
 
 RUN adduser --uid 1001 --system elasticsearch
 
-ARG ELASTICSEARCH_VERSION=6.7.2
+ARG ELASTICSEARCH_VERSION
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     elasticsearch=${ELASTICSEARCH_VERSION} \
