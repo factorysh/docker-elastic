@@ -1,8 +1,16 @@
-Docker Elastic
-==============
+Elastic search images by Bearstech
+==================================
 
-Elasticsearch
--------------
+- [bearstech/elasticsearch](https://hub.docker.com/r/bearstech/elasticsearch)
 
-Cerebro
--------
+Dockerfiles
+-----------
+
+Dockerfiles are available at https://github.com/factorysh/docker-elastic
+
+Usage
+-----
+
+```
+docker run --rm bearstech/elasticsearch
+```
