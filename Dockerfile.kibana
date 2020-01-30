@@ -2,7 +2,9 @@ ARG ELASTIC_MAJOR=6
 FROM bearstech/elastic:${ELASTIC_MAJOR}
 
 ARG KIBANA_VERSION
-RUN apt-get update \
+RUN set -eux \
+    &&  export http_proxy=${HTTP_PROXY} \
+    &&  apt-get update \
     && apt-get install -y --no-install-recommends \
         kibana-oss=${KIBANA_VERSION} \
     && rm -rf /var/lib/apt/lists/*

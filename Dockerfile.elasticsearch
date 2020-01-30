@@ -11,7 +11,9 @@ VOLUME /var/log/elasticsearch
 RUN adduser --uid 1001 --system elasticsearch
 
 ARG ELASTICSEARCH_VERSION
-RUN apt-get update \
+RUN set -eux \
+    &&  export http_proxy=${HTTP_PROXY} \
+    &&  apt-get update \
     && apt-get install -y --no-install-recommends \
     elasticsearch=${ELASTICSEARCH_VERSION} \
     gosu \
