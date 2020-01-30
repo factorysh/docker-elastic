@@ -11,10 +11,12 @@ ENV LS_SETTINGS_DIR="/etc/logstash"
 RUN adduser --uid 1001 --system --home /usr/share/logstash logstash
 
 ARG LOGSTASH_VERSION
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends logstash=${LOGSTASH_VERSION} \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN set -eux \
+    &&  export http_proxy=${HTTP_PROXY} \
+    &&  apt-get update \
+    &&  apt-get install -y --no-install-recommends logstash=${LOGSTASH_VERSION} \
+    &&  apt-get clean \
+    &&  rm -rf /var/lib/apt/lists/*
 
 
 USER logstash
