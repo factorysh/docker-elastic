@@ -8,7 +8,7 @@ RUN set -eux \
     &&  apt-get install -y --no-install-recommends \
             apt-transport-https \
             ca-certificates \
-    &&  wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
+    &&  wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor > /etc/apt/trusted.gpg.d/elastic.gpg \
     &&  echo "deb https://artifacts.elastic.co/packages/oss-${ELASTIC_MAJOR}.x/apt stable main" > /etc/apt/sources.list.d/elastic-oss.list \
     &&  rm -rf /var/lib/apt/lists/*
 
