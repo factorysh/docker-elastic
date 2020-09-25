@@ -6,7 +6,7 @@ WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN adduser --system --uid 1001 cerebro
-RUN wget -O- https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VERSION}/cerebro-${CEREBRO_VERSION}.tgz | tar -xvz \
+RUN curl -L https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VERSION}/cerebro-${CEREBRO_VERSION}.tgz | tar -xvz \
         && ln -s /opt/cerebro-${CEREBRO_VERSION} /opt/cerebro
 
 EXPOSE 9000
