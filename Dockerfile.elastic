@@ -1,5 +1,5 @@
 FROM bearstech/debian:stretch
-ARG ELASTIC_MAJOR=6
+ARG ELASTIC_MAJOR
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN set -eux \

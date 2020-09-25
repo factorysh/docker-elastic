@@ -4,7 +4,8 @@ include Makefile.build_args
 
 GOSS_VERSION := 0.3.7
 VERSION6 := 6.8.4
-VERSION7 := 7.4.1
+VERSION7 := 7.9.2
+CEREBRO_VERSION := 0.9.2
 
 build: build6 build7 build-cerebro
 
@@ -62,6 +63,7 @@ build-elasticsearch7: build-elastic7-java
 build-cerebro:
 	 docker build \
 		$(DOCKER_BUILD_ARGS) \
+		--build-arg CEREBRO_VERSION=${CEREBRO_VERSION} \
 		-t bearstech/cerebro \
 		-f Dockerfile.cerebro \
 		.

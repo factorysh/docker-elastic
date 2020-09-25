@@ -1,5 +1,5 @@
-FROM bearstech/java:1.8
-ARG ELASTIC_MAJOR=6
+FROM bearstech/java:11
+ARG ELASTIC_MAJOR
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN set -eux \
