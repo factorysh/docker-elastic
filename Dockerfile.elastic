@@ -1,5 +1,5 @@
-FROM bearstech/debian:stretch
-ARG ELASTIC_MAJOR=6
+FROM bearstech/debian:10
+ARG ELASTIC_MAJOR
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN set -eux \
@@ -8,7 +8,8 @@ RUN set -eux \
     &&  apt-get install -y --no-install-recommends \
             apt-transport-https \
             ca-certificates \
-    &&  wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor > /etc/apt/trusted.gpg.d/elastic.gpg \
+            gpg \
+    &&  curl https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor > /etc/apt/trusted.gpg.d/elastic.gpg \
     &&  echo "deb https://artifacts.elastic.co/packages/oss-${ELASTIC_MAJOR}.x/apt stable main" > /etc/apt/sources.list.d/elastic-oss.list \
     &&  rm -rf /var/lib/apt/lists/*
 

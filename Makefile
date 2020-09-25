@@ -4,7 +4,8 @@ include Makefile.build_args
 
 GOSS_VERSION := 0.3.7
 VERSION6 := 6.8.4
-VERSION7 := 7.4.1
+VERSION7 := 7.9.2
+CEREBRO_VERSION := 0.9.2
 
 build: build6 build7 build-cerebro
 
@@ -14,6 +15,7 @@ build7: build-elasticsearch7 build-logstash7 build-kibana7
 build-elastic6:
 	 docker build \
 		$(DOCKER_BUILD_ARGS) \
+		--build-arg ELASTIC_MAJOR=6 \
 		-t bearstech/elastic:6 \
 		-f Dockerfile.elastic \
 		.
@@ -29,6 +31,7 @@ build-elastic7:
 build-elastic6-java:
 	 docker build \
 		$(DOCKER_BUILD_ARGS) \
+		--build-arg ELASTIC_MAJOR=6 \
 		-t bearstech/elastic-java:6 \
 		-f Dockerfile.elastic-java \
 		.
@@ -44,6 +47,7 @@ build-elastic7-java:
 build-elasticsearch6: build-elastic6-java
 	 docker build \
 		$(DOCKER_BUILD_ARGS) \
+		--build-arg ELASTIC_MAJOR=6 \
 		--build-arg ELASTICSEARCH_VERSION=${VERSION6} \
 		-t bearstech/elasticsearch:6 \
 		-f Dockerfile.elasticsearch \
@@ -62,6 +66,7 @@ build-elasticsearch7: build-elastic7-java
 build-cerebro:
 	 docker build \
 		$(DOCKER_BUILD_ARGS) \
+		--build-arg CEREBRO_VERSION=${CEREBRO_VERSION} \
 		-t bearstech/cerebro \
 		-f Dockerfile.cerebro \
 		.
@@ -69,6 +74,7 @@ build-cerebro:
 build-logstash6: build-elastic6-java
 	 docker build \
 		$(DOCKER_BUILD_ARGS) \
+		--build-arg ELASTIC_MAJOR=6 \
 		--build-arg LOGSTASH_VERSION=1:${VERSION6}-1 \
 		-t bearstech/logstash:6 \
 		-f Dockerfile.logstash \
@@ -87,6 +93,7 @@ build-logstash7: build-elastic7-java
 build-kibana6: build-elastic6
 	 docker build \
 		$(DOCKER_BUILD_ARGS) \
+		--build-arg ELASTIC_MAJOR=6 \
 		--build-arg KIBANA_VERSION=${VERSION6} \
 		-t bearstech/kibana:6 \
 		-f Dockerfile.kibana \

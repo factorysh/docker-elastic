@@ -1,12 +1,12 @@
-FROM bearstech/java:1.8
+FROM bearstech/java:11
 
-ENV CEREBRO_VERSION=0.8.4
+ARG CEREBRO_VERSION
 
 WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN adduser --system --uid 1001 cerebro
-RUN wget -O- https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VERSION}/cerebro-${CEREBRO_VERSION}.tgz | tar -xvz \
+RUN curl -L https://github.com/lmenezes/cerebro/releases/download/v${CEREBRO_VERSION}/cerebro-${CEREBRO_VERSION}.tgz | tar -xvz \
         && ln -s /opt/cerebro-${CEREBRO_VERSION} /opt/cerebro
 
 EXPOSE 9000
@@ -32,4 +32,5 @@ LABEL \
     org.opencontainers.image.revision=${GIT_VERSION} \
     org.opencontainers.image.created=${BUILD_DATE} \
     org.opencontainers.image.url=https://github.com/factorysh/docker-elastic \
-    org.opencontainers.image.source=https://github.com/factorysh/docker-elastic/blob/${GIT_VERSION}/Dockerfile.cerebro
+    org.opencontainers.image.source=https://github.com/factorysh/docker-elastic/blob/${GIT_VERSION}/Dockerfile.cerebro \
+    lmenezes.cerebro=${CEREBRO_VERSION}

@@ -1,6 +1,6 @@
-ARG ELASTIC_MAJOR=6
+ARG ELASTIC_MAJOR
 FROM bearstech/elastic-java:${ELASTIC_MAJOR}
-ARG ELASTIC_MAJOR=6
+ARG ELASTIC_MAJOR
 
 EXPOSE 9200
 LABEL traefik.port=9200
@@ -15,7 +15,7 @@ RUN set -eux \
     &&  export http_proxy=${HTTP_PROXY} \
     &&  apt-get update \
     && apt-get install -y --no-install-recommends \
-    elasticsearch=${ELASTICSEARCH_VERSION} \
+    elasticsearch-oss=${ELASTICSEARCH_VERSION} \
     gosu \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
