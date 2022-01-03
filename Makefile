@@ -3,9 +3,9 @@ include Makefile.lint
 include Makefile.build_args
 
 GOSS_VERSION := 0.3.7
-VERSION6 := 6.8.4
-VERSION7 := 7.9.2
-CEREBRO_VERSION := 0.9.2
+VERSION6 := 6.8.22
+VERSION7 := 7.10.2
+CEREBRO_VERSION := 0.9.4
 
 build: build6 build7 build-cerebro
 
